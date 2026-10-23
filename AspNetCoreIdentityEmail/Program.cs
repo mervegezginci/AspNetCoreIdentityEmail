@@ -1,6 +1,17 @@
+using AspNetCoreIdentityEmail.Context;
+using AspNetCoreIdentityEmail.Entities;
+using AspNetCoreIdentityEmail.Models.IdentityModels;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<EmailContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<EmailContext>()
+    .AddErrorDescriber<CustomIdentityValidator>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -16,14 +27,14 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Login}/{action=UserLogin}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
