@@ -37,7 +37,7 @@ namespace AspNetCoreIdentityEmail.Controllers
             var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "UserLayout");
+                return RedirectToAction("Inbox", "Message");
             }
 
             ModelState.AddModelError(string.Empty, "Kullanıcı adı veya şifre yanlış");
