@@ -1,0 +1,101 @@
+@model List<Message>
+@{
+    ViewData["Title"] = "Gönderilen Kutusu";
+    Layout = "~/Views/UserLayout/Index.cshtml";
+}
+
+@functions {
+    string GetCategoryBadgeStyle(int categoryId)
+    {
+        return (categoryId % 6) switch
+        {
+            1 => "background-color: #00c292; color: #fff;", // Yeşil
+            2 => "background-color: #01c0c8; color: #fff;", // Turkuaz
+            3 => "background-color: #ab8ce4; color: #fff;", // Mor
+            4 => "background-color: #fb9678; color: #fff;", // Turuncu
+            5 => "background-color: #e46a76; color: #fff;", // Kırmızı
+            0 => "background-color: #3b5998; color: #fff;", // Mavi
+            _ => "background-color: #607d8b; color: #fff;"
+        };
+    }
+}
+
+<style>
+    .table.table-inbox > tbody > tr > td {
+        line-height: 24px !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<div class="inbox-area">
+    <div class="container">
+        <div class="row">
+            @await Component.InvokeAsync("_MessageSidebarComponentPartial")
+
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="inbox-text-list sm-res-mg-t-30">
+                    <div class="form-group">
+                        <div class="nk-int-st search-input search-overt">
+                            <input type="text" class="form-control" placeholder="E-posta ara..." />
+                            <button class="btn search-ib">Ara</button>
+                        </div>
+                    </div>
+                    <div class="inbox-btn-st-ls btn-toolbar">
+                        <div class="btn-group ib-btn-gp active-hook nk-email-inbox">
+                            <a href="/Message/Sendbox" class="btn btn-default btn-sm"><i class="notika-icon notika-refresh"></i> Yenile</a>
+                            <button class="btn btn-default btn-sm" title="Sonraki"><i class="notika-icon notika-next"></i></button>
+                            <button class="btn btn-default btn-sm" title="Aşağı Taşı"><i class="notika-icon notika-down-arrow"></i></button>
+                            <button class="btn btn-default btn-sm" title="Sil"><i class="notika-icon notika-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-inbox">
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label><input type="checkbox" class="i-checks"></label>
+                                            </td>
+                                            <td>
+                                                <a href="/Message/MessageDetail/@item.MessageId"><strong>Alıcı: </strong>@item.ReceiverEmail</a>
+                                                @if (item.Category != null)
+                                                {
+                                                    <a href="/Message/GetMessageListByCategory/@item.CategoryId" 
+                                                       class="label" 
+                                                       style="margin-left: 6px; font-size: 11px; padding: 3px 8px; border-radius: 3px; @GetCategoryBadgeStyle(item.CategoryId)">
+                                                        @item.Category.CategoryName
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="/Message/MessageDetail/@item.MessageId">
+                                                    <strong>Konu: @item.Subject - </strong>
+                                                    <span>@(item.MessageDetail != null && item.MessageDetail.Length > 45 ? item.MessageDetail.Substring(0, 45) + "..." : item.MessageDetail)</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <i class="notika-icon notika-sent" style="color: #00c292;"></i>
+                                            </td>
+                                            <td class="text-right mail-date">@item.SendDate.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center" style="padding: 30px;">
+                                            <p>Gönderilen kutunuzda henüz mesaj bulunmamaktadır.</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

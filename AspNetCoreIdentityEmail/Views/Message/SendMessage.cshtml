@@ -1,0 +1,96 @@
+@model Message
+@{
+    ViewData["Title"] = "Yeni Mesaj Oluştur";
+    Layout = "~/Views/UserLayout/Index.cshtml";
+}
+
+<div class="inbox-area">
+    <div class="container">
+        <div class="row">
+            @await Component.InvokeAsync("_MessageSidebarComponentPartial")
+
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="view-mail-list sm-res-mg-t-30">
+                    <div class="view-mail-hd">
+                        <div class="view-mail-hrd">
+                            <h2>Yeni Mesaj Gönder</h2>
+                        </div>
+                    </div>
+
+                    <form method="post" asp-action="SendMessage" asp-controller="Message">
+                        <div class="cmp-int mg-t-20">
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                    <div class="cmp-int-lb cmp-int-lb1 text-right">
+                                        <label style="font-weight: 600; padding-top: 7px;">Alıcı E-posta:</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="nk-int-st cmp-int-in cmp-email-over">
+                                            <input type="email" asp-for="ReceiverEmail" class="form-control" placeholder="ornek@email.com" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                    <div class="cmp-int-lb text-right">
+                                        <label style="font-weight: 600; padding-top: 7px;">Kategori:</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="nk-int-st cmp-int-in cmp-email-over">
+                                            @Html.DropDownListFor(x => x.CategoryId, (List<SelectListItem>)ViewBag.Categories, "Kategori Seçiniz", new { @class = "form-control", required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                    <div class="cmp-int-lb text-right">
+                                        <label style="font-weight: 600; padding-top: 7px;">Konu:</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+                                    <div class="form-group cmp-em-mg">
+                                        <div class="nk-int-st cmp-int-in cmp-email-over">
+                                            <input type="text" asp-for="Subject" class="form-control" placeholder="Mesaj konusu..." required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                    <div class="cmp-int-lb text-right">
+                                        <label style="font-weight: 600; padding-top: 7px;">Mesaj İçeriği:</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="nk-int-st">
+                                            <textarea asp-for="MessageDetail" class="form-control" rows="8" placeholder="Mesajınızı buraya yazınız..." required style="border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vw-ml-action-ls text-right mg-t-20" style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-success waves-effect" style="padding: 8px 25px; font-size: 15px;">
+                                <i class="notika-icon notika-sent"></i> Mesajı Gönder
+                            </button>
+                            <a href="/Message/Inbox" class="btn btn-default waves-effect" style="padding: 8px 20px; font-size: 15px;">
+                                İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

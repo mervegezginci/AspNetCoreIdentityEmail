@@ -1,0 +1,68 @@
+@model Message
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Views/UserLayout/Index.cshtml";
+}
+
+@functions {
+    string GetCategoryBadgeStyle(int categoryId)
+    {
+        return (categoryId % 6) switch
+        {
+            1 => "background-color: #00c292; color: #fff;", // Yeşil
+            2 => "background-color: #01c0c8; color: #fff;", // Turkuaz
+            3 => "background-color: #ab8ce4; color: #fff;", // Mor
+            4 => "background-color: #fb9678; color: #fff;", // Turuncu
+            5 => "background-color: #e46a76; color: #fff;", // Kırmızı
+            0 => "background-color: #3b5998; color: #fff;", // Mavi
+            _ => "background-color: #607d8b; color: #fff;"
+        };
+    }
+}
+
+<div class="inbox-area">
+    <div class="container">
+        <div class="row">
+            @await Component.InvokeAsync("_MessageSidebarComponentPartial")
+
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <div class="view-mail-list sm-res-mg-t-30">
+                    <div class="view-mail-hd">
+                        <div class="view-mail-hrd">
+                            <h2>@Model.Subject</h2>
+                        </div>
+                        <div class="view-ml-rl">
+                            <p>@Model.SendDate.ToString("dd MMMM yyyy HH:mm")</p>
+                        </div>
+                    </div>
+                    <div class="mail-ads mail-vw-ph">
+                        <p class="first-ph">
+                            <b>Kimden: </b> <a href="mailto:@Model.SenderEmail">@Model.SenderEmail</a>
+                        </p>
+                        <p>
+                            <b>Kime: </b> <a href="mailto:@Model.ReceiverEmail">@Model.ReceiverEmail</a>
+                        </p>
+                        @if (Model.Category != null)
+                        {
+                            <p>
+                                <b>Kategori: </b> 
+                                <span class="label" style="font-size: 12px; padding: 4px 10px; border-radius: 3px; @GetCategoryBadgeStyle(Model.CategoryId)">
+                                    @Model.Category.CategoryName
+                                </span>
+                            </p>
+                        }
+                    </div>
+                    <div class="view-mail-atn" style="min-height: 200px; padding: 25px; margin-top: 15px; background: #fafafa; border: 1px solid #eee; border-radius: 4px;">
+                        <p style="white-space: pre-wrap; font-size: 15px; line-height: 1.8; color: #444;">@Model.MessageDetail</p>
+                    </div>
+                    <div class="vw-ml-action-ls text-right mg-t-20" style="margin-top: 25px;">
+                        <div class="btn-group ib-btn-gp active-hook nk-email-inbox">
+                            <a href="/Message/Inbox" class="btn btn-default btn-sm waves-effect"><i class="notika-icon notika-left-arrow"></i> Gelen Kutusu</a>
+                            <a href="/Message/SendMessage" class="btn btn-default btn-sm waves-effect"><i class="notika-icon notika-next"></i> Yanıtla</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
